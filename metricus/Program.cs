@@ -2,6 +2,7 @@ using System;
 using Metricus;
 using Plugins;
 using System.Threading;
+using System.Diagnostics;
 
 namespace metricus
 {
@@ -9,10 +10,12 @@ namespace metricus
 	{
 		public static void Main (string[] args)
 		{
+
 			Console.WriteLine ("Hello World!");
 			PluginManager pluginManager = new PluginManager ();
 			new BasicInputPlugin (pluginManager);
 			new BasicOutputPlugin (pluginManager);
+			new AspNetInputPlugin (pluginManager);
 			var start = DateTime.Now;
 			for (int i=0; i < 10000; i++) 
 			{

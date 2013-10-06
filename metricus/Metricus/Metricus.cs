@@ -1,5 +1,7 @@
 using System;
+using System.Text.RegularExpressions;
 using System.Collections.Generic;
+
 
 namespace Metricus
 {
@@ -65,7 +67,7 @@ namespace Metricus
 				this.RegisterInputPlugin ((InputPlugin)plugin);
 				break;
 			case "Metricus.OutputPlugin":
-				Console.WriteLine ("Registering InputPlugin");
+				Console.WriteLine ("Registering OutputPlugin");
 				this.RegisterOutputPlugin ((OutputPlugin)plugin);
 				break;
 			case "Metricus.FilterPlugin":
@@ -102,12 +104,19 @@ namespace Metricus
 	public struct metric {
 		public float value;
 		public DateTime timestamp;
-		public String name;
-		public metric(float val, DateTime time, string theName)
+		public String category;
+		public String type;
+		public String instance;
+		public int interval;
+		public metric( string theCategory, string theType, string theInstance, float theValue, DateTime theTime, int theInterval=10)
 		{
-			value = val;
-			name = theName;
-			timestamp = time;
+			category = Regex.Replace(theCategory,"(\\s+|\\.)","_");
+			type = Regex.Replace(theType,"(\\s+|\\.)","_");
+			instance = Regex.Replace(theInstance,"(\\s+|\\.)","_");
+			value = theValue;
+			timestamp = theTime;
+			interval = theInterval;
+
 		}
 
 	}

@@ -6,21 +6,22 @@ using System.Threading;
 
 namespace Plugins
 {
-	public class BasicInputPlugin : InputPlugin
-	{
-		private List<PerformanceCounter> performanceCounters = new List<PerformanceCounter>();
 
-		public BasicInputPlugin(PluginManager pm) : base(pm)
+	public class AspNetInputPlugin : InputPlugin
+	{
+		private List<PerformanceCounter> performanceCounters = new List<PerformanceCounter> ();
+
+		public AspNetInputPlugin(PluginManager pm) : base(pm)
 		{
-			this.LoadPlugins ();
+			this.LoadCounters();
 		}
 
 		public override List<metric> Work()
 		{
-		    var metrics = new List<metric>();
+			var metrics = new List<metric>();
 			foreach( var pc in performanceCounters)
 			{
-				metrics.Add (new metric (pc.NextValue (), DateTime.Now, pc.CounterName));
+				metrics.Add (new metric( pc.CategoryName, pc.CounterName, pc.InstanceName, pc.NextValue(), DateTime.Now));
 			}
 			return metrics;
 		}
@@ -31,7 +32,43 @@ namespace Plugins
 			this.performanceCounters.Add (performanceCoutner);
 		}
 
-		private void LoadPlugins()
+		private void LoadCounters()
+		{
+			var category = new PerformanceCounterCategory ("ASP.NET Applications");
+			foreach (var instance in category.GetInstanceNames())
+			{
+				this.RegisterPerformanceCounters (new PerformanceCounter ("ASP.NET Applications", "Request Execution Time", instance));
+			}
+		}
+
+	}
+
+	public class BasicInputPlugin : InputPlugin
+	{
+		private List<PerformanceCounter> performanceCounters = new List<PerformanceCounter>();
+
+		public BasicInputPlugin(PluginManager pm) : base(pm)
+		{
+			this.LoadCounters ();
+		}
+
+		public override List<metric> Work()
+		{
+		    var metrics = new List<metric>();
+			foreach( var pc in performanceCounters)
+			{
+				metrics.Add (new metric( pc.CategoryName, pc.CounterName, pc.InstanceName, pc.NextValue(), DateTime.Now)); 
+			}
+			return metrics;
+		}
+
+		private void RegisterPerformanceCounters(PerformanceCounter performanceCoutner)
+		{
+			performanceCoutner.NextValue ();
+			this.performanceCounters.Add (performanceCoutner);
+		}
+
+		private void LoadCounters()
 		{
 			var pcList = new List<PerformanceCounter>();
 			pcList.Add (new PerformanceCounter ("Processor", "% Processor Time", "_Total"));		          
@@ -49,7 +86,7 @@ namespace Plugins
 
 		public override void Work(metric theMetric)
 		{
-			Console.WriteLine (theMetric.value + " " + theMetric.name);
+			Console.WriteLine ("{1}.{2}.{3} : {0}", theMetric.value,theMetric.category,theMetric.instance,theMetric.type);
 		}
 	}
 }
