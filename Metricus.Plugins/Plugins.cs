@@ -1,14 +1,15 @@
 using System;
 using Metricus;
+using Metricus.Plugins;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Threading;
 using Graphite;
 
-namespace Metricus.Plugins
+namespace Metricus.Pluginz
 {
 
-	public class AspNetInputPlugin : InputPlugin
+	public class AspNetInputPlugin : InputPlugin, IInputPlugin
 	{
 		private List<PerformanceCounter> performanceCounters = new List<PerformanceCounter> ();
 
@@ -45,7 +46,7 @@ namespace Metricus.Plugins
 
 	}
 
-	public class BasicInputPlugin : InputPlugin
+	public class BasicInputPlugin : InputPlugin, IInputPlugin
 	{
 		private List<PerformanceCounter> performanceCounters = new List<PerformanceCounter>();
 
@@ -83,7 +84,7 @@ namespace Metricus.Plugins
 		}
 	}
 
-	public class BasicOutputPlugin : OutputPlugin
+	public class BasicOutputPlugin : OutputPlugin, IOutputPlugin
 	{
 		public BasicOutputPlugin(PluginManager pm) : base(pm) {}
 
@@ -93,7 +94,7 @@ namespace Metricus.Plugins
 		}
 	}
 
-	public class GraphiteOutputPlugin : OutputPlugin
+	public class GraphiteOutputPlugin : OutputPlugin, IOutputPlugin
 	{
 		private PluginManager pm;
 		private string graphiteHostname;

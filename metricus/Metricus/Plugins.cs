@@ -8,7 +8,17 @@ using Graphite;
 namespace Metricus.Plugins
 {
 
-	public class AspNetInputPlugin : InputPlugin
+	public interface IInputPlugin
+	{
+		List<metric> Work();
+	}
+
+	public interface IOutputPlugin
+	{
+		void Work(metric m);
+	}
+
+	public class AspNetInputPlugin : InputPlugin, IInputPlugin
 	{
 		private List<PerformanceCounter> performanceCounters = new List<PerformanceCounter> ();
 
