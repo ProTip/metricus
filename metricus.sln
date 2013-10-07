@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metricus", "metricus\metricus.csproj", "{07AD6E55-72F3-4740-8770-A1E36D8EFDA3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metricus.Plugins", "Metricus.Plugins\Metricus.Plugins.csproj", "{7D01D952-535D-4A04-8509-8948D501701C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -13,6 +15,10 @@ Global
 		{07AD6E55-72F3-4740-8770-A1E36D8EFDA3}.Debug|x86.Build.0 = Debug|x86
 		{07AD6E55-72F3-4740-8770-A1E36D8EFDA3}.Release|x86.ActiveCfg = Release|x86
 		{07AD6E55-72F3-4740-8770-A1E36D8EFDA3}.Release|x86.Build.0 = Release|x86
+		{7D01D952-535D-4A04-8509-8948D501701C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7D01D952-535D-4A04-8509-8948D501701C}.Debug|x86.Build.0 = Debug|Any CPU
+		{7D01D952-535D-4A04-8509-8948D501701C}.Release|x86.ActiveCfg = Release|Any CPU
+		{7D01D952-535D-4A04-8509-8948D501701C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = metricus\metricus.csproj
