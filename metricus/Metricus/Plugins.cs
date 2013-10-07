@@ -3,25 +3,27 @@ using Metricus;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Threading;
+using Graphite;
 
-namespace Plugins
+namespace Metricus.Plugins
 {
 
 	public class AspNetInputPlugin : InputPlugin
 	{
 		private List<PerformanceCounter> performanceCounters = new List<PerformanceCounter> ();
 
-		public AspNetInputPlugin(PluginManager pm) : base(pm)
-		{
-			this.LoadCounters();
-		}
+		public AspNetInputPlugin(PluginManager pm) : base(pm) { this.LoadCounters(); }
 
 		public override List<metric> Work()
 		{
 			var metrics = new List<metric>();
 			foreach( var pc in performanceCounters)
 			{
-				metrics.Add (new metric( pc.CategoryName, pc.CounterName, pc.InstanceName, pc.NextValue(), DateTime.Now));
+				try {
+					metrics.Add (new metric( pc.CategoryName, pc.CounterName, pc.InstanceName, pc.NextValue(), DateTime.Now));
+				} catch(Exception e) {
+					Console.WriteLine (e.Message);
+				}
 			}
 			return metrics;
 		}
@@ -57,7 +59,11 @@ namespace Plugins
 		    var metrics = new List<metric>();
 			foreach( var pc in performanceCounters)
 			{
-				metrics.Add (new metric( pc.CategoryName, pc.CounterName, pc.InstanceName, pc.NextValue(), DateTime.Now)); 
+				try {
+					metrics.Add (new metric( pc.CategoryName, pc.CounterName, pc.InstanceName, pc.NextValue(), DateTime.Now));
+				} catch(Exception e) {
+					Console.WriteLine (e.Message);
+				}
 			}
 			return metrics;
 		}
@@ -79,14 +85,37 @@ namespace Plugins
 
 	public class BasicOutputPlugin : OutputPlugin
 	{
-		public BasicOutputPlugin(PluginManager pm) : base(pm)
-		{
-
-		}
+		public BasicOutputPlugin(PluginManager pm) : base(pm) {}
 
 		public override void Work(metric theMetric)
 		{
 			Console.WriteLine ("{1}.{2}.{3} : {0}", theMetric.value,theMetric.category,theMetric.instance,theMetric.type);
+		}
+	}
+
+	public class GraphiteOutputPlugin : OutputPlugin
+	{
+		private PluginManager pm;
+		private string graphiteHostname;
+		private int graphitePort;
+
+		public GraphiteOutputPlugin(PluginManager pm) : base(pm) 
+		{ 
+			this.pm = pm;
+			graphiteHostname = "10.71.20.78";
+			graphitePort = 2003; 
+		}
+
+		public override void Work(metric theMetric)
+		{
+			using (var client = new GraphiteUdpClient (graphiteHostname, graphitePort, pm.Hostname )) {
+				var path = theMetric.category;
+				if ( theMetric.instance != "" ) path += "." + theMetric.instance;
+				path += "." + theMetric.type;
+				path = path.ToLower ();
+				client.Send(path, (int)theMetric.value);
+			}
+
 		}
 	}
 }

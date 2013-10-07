@@ -49,7 +49,9 @@ namespace Metricus
 		List<OutputPlugin> outputPlugins = new List<OutputPlugin>(); 
 		List<FilterPlugin> filterPlugins= new List<FilterPlugin>();
 
-		public PluginManager() {}
+		public string Hostname { get; internal set; }
+
+		public PluginManager(string hostname) { this.Hostname = hostname; }
 
 		public void RegisterInputPlugin( InputPlugin plugin) { inputPlugins.Add (plugin); }
 

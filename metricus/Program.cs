@@ -1,6 +1,6 @@
 using System;
 using Metricus;
-using Plugins;
+using Metricus.Plugins;
 using System.Threading;
 using System.Diagnostics;
 
@@ -12,12 +12,13 @@ namespace metricus
 		{
 
 			Console.WriteLine ("Hello World!");
-			PluginManager pluginManager = new PluginManager ();
+			PluginManager pluginManager = new PluginManager ("laptop.co.nz");
 			new BasicInputPlugin (pluginManager);
 			new BasicOutputPlugin (pluginManager);
 			new AspNetInputPlugin (pluginManager);
+			new GraphiteOutputPlugin (pluginManager);
 			var start = DateTime.Now;
-			for (int i=0; i < 10000; i++) 
+			for (int i=0; i < 10000; i++)
 			{
 				pluginManager.Tick ();
 				Thread.Sleep (5000);
