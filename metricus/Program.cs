@@ -23,8 +23,6 @@ namespace metricus
 				Console.WriteLine ("Plugin directory not found!");
 			}
 
-
-
 			foreach (var plugin in dllFileNames) {
 				Console.WriteLine (plugin);
 			}
@@ -43,10 +41,6 @@ namespace metricus
 				Activator.CreateInstance(type, pluginManager);
 			}
 
-			//new BasicInputPlugin (pluginManager);
-			//new BasicOutputPlugin (pluginManager);
-			//new AspNetInputPlugin (pluginManager);
-			//new GraphiteOutputPlugin (pluginManager);
 			var start = DateTime.Now;
 			for (int i=0; i < 10000; i++)
 			{
