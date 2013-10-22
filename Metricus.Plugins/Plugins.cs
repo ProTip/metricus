@@ -23,7 +23,7 @@ namespace Metricus.Pluginz
 				try {
 					metrics.Add (new metric( pc.CategoryName, pc.CounterName, pc.InstanceName, pc.NextValue(), DateTime.Now));
 				} catch(Exception e) {
-					Console.WriteLine (e.Message);
+					//Console.WriteLine (e.Message);
 				}
 			}
 			return metrics;
@@ -63,7 +63,7 @@ namespace Metricus.Pluginz
 				try {
 					metrics.Add (new metric( pc.CategoryName, pc.CounterName, pc.InstanceName, pc.NextValue(), DateTime.Now));
 				} catch(Exception e) {
-					Console.WriteLine (e.Message);
+					//Console.WriteLine (e.Message);
 				}
 			}
 			return metrics;
@@ -90,7 +90,7 @@ namespace Metricus.Pluginz
 
 		public override void Work(metric theMetric)
 		{
-			Console.WriteLine ("{1}.{2}.{3} : {0}", theMetric.value,theMetric.category,theMetric.instance,theMetric.type);
+			//Console.WriteLine ("{1}.{2}.{3} : {0}", theMetric.value,theMetric.category,theMetric.instance,theMetric.type);
 		}
 	}
 

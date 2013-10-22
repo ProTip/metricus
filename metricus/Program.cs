@@ -1,4 +1,5 @@
 using System;
+using System.Timers;
 using Metricus;
 using Metricus.Plugins;
 using System.Threading;
@@ -6,16 +7,24 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
+using Topshelf;
 
 namespace metricus
 {
-	class MainClass
+	class MetricusService : ServiceControl
 	{
+		readonly System.Timers.Timer _timer;
 
-		public static void Main (string[] args)
+
+		private PluginManager pluginManager;
+
+		public MetricusService() 
 		{
+			_timer = new System.Timers.Timer (10000);
+			_timer.Elapsed += new ElapsedEventHandler (Tick);
+			Console.WriteLine ("Hello World!");
 			string[] dllFileNames = null;
-
+			Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
 			if (Directory.Exists ("Plugins")) {
 				Console.WriteLine ("Loading plugins");
 				dllFileNames = Directory.GetFiles ("Plugins", "*.dll");
@@ -27,9 +36,7 @@ namespace metricus
 				Console.WriteLine (plugin);
 			}
 
-
-			Console.WriteLine ("Hello World!");
-			PluginManager pluginManager = new PluginManager ("laptop.co.nz");
+			pluginManager = new PluginManager ("laptop.co.nz");
 
 			var inputPlugins = PluginLoader<IInputPlugin>.LoadPlugins ("Plugins");
 			foreach (Type type in inputPlugins) {
@@ -41,15 +48,38 @@ namespace metricus
 				Activator.CreateInstance(type, pluginManager);
 			}
 
+		}
+
+		public bool Start(HostControl hostControl)
+		{
+			_timer.Start ();
+			return true;
+		}
+
+		public bool Stop(HostControl hostControl)
+		{
+			_timer.Stop ();
+			return true;
+		}
+
+		private void Tick (object source, ElapsedEventArgs e)
+		{
 			var start = DateTime.Now;
-			for (int i=0; i < 10000; i++)
-			{
-				pluginManager.Tick ();
-				Thread.Sleep (5000);
-			}
+			this.pluginManager.Tick ();
 			var elapsed = DateTime.Now - start;
-			Console.WriteLine ("Elapsed time: " + elapsed);
-			Console.ReadKey ();
+		}
+	}
+
+	public class Program
+	{
+		public static void Main (string[] args)
+		{
+			HostFactory.Run (x =>
+			{
+				x.Service<MetricusService>();
+				x.RunAsLocalSystem();			
+				x.SetServiceName("Metricus");
+			});
 		}
 	}
 }
