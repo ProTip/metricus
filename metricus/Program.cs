@@ -22,21 +22,40 @@ namespace metricus
 		{
 			_timer = new System.Timers.Timer (10000);
 			_timer.Elapsed += new ElapsedEventHandler (Tick);
-			Console.WriteLine ("Hello World!");
+			pluginManager = new PluginManager ("laptop.co.nz");
+			//Console.WriteLine ("Hello World!");
+		}
+
+		public bool Start(HostControl hostControl)
+		{
+			this.LoadPlugins ();
+			_timer.Start ();
+			return true;
+		}
+
+		public bool Stop(HostControl hostControl)
+		{
+			_timer.Stop ();
+			return true;
+		}
+
+		private void LoadPlugins()
+		{
 			string[] dllFileNames = null;
 			Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+			Console.WriteLine (Directory.GetCurrentDirectory().ToString());
 			if (Directory.Exists ("Plugins")) {
-				Console.WriteLine ("Loading plugins");
+				//Console.WriteLine ("Loading plugins");
 				dllFileNames = Directory.GetFiles ("Plugins", "*.dll");
 			} else {
-				Console.WriteLine ("Plugin directory not found!");
+				//Console.WriteLine ("Plugin directory not found!");
 			}
 
 			foreach (var plugin in dllFileNames) {
-				Console.WriteLine (plugin);
+				//Console.WriteLine (plugin);
 			}
 
-			pluginManager = new PluginManager ("laptop.co.nz");
+
 
 			var inputPlugins = PluginLoader<IInputPlugin>.LoadPlugins ("Plugins");
 			foreach (Type type in inputPlugins) {
@@ -47,19 +66,6 @@ namespace metricus
 			foreach (Type type in outputPlugins) {
 				Activator.CreateInstance(type, pluginManager);
 			}
-
-		}
-
-		public bool Start(HostControl hostControl)
-		{
-			_timer.Start ();
-			return true;
-		}
-
-		public bool Stop(HostControl hostControl)
-		{
-			_timer.Stop ();
-			return true;
 		}
 
 		private void Tick (object source, ElapsedEventArgs e)
@@ -79,6 +85,7 @@ namespace metricus
 				x.Service<MetricusService>();
 				x.RunAsLocalSystem();			
 				x.SetServiceName("Metricus");
+				x.SetDescription("Metric collection and ouput service");
 			});
 		}
 	}

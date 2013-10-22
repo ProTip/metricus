@@ -103,8 +103,8 @@ namespace Metricus.Pluginz
 		public GraphiteOutputPlugin(PluginManager pm) : base(pm) 
 		{ 
 			this.pm = pm;
-			graphiteHostname = "10.71.20.78";
-			graphitePort = 2003; 
+			graphiteHostname = "10.71.20.201";
+			graphitePort = 2004; 
 		}
 
 		public override void Work(metric theMetric)

@@ -10,6 +10,8 @@ namespace Metricus
 	{
 		public static ICollection<Type> LoadPlugins(string path)
 		{
+			//Console.WriteLine ("Loading plugins from path {0} in directory {1}", path, Directory.GetCurrentDirectory().ToString());
+			Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
 			string[] dllFileNames = null;
 			if (Directory.Exists (path)) 
 			{
@@ -19,7 +21,7 @@ namespace Metricus
 				foreach (var dllFile in dllFileNames) {
 					AssemblyName an = AssemblyName.GetAssemblyName (dllFile);
 					Assembly assembly = Assembly.Load (an);
-					Console.WriteLine ("Adding assembly :" + assembly.FullName);
+					//Console.WriteLine ("Adding assembly :" + assembly.FullName);
 					assemblies.Add (assembly);
 				}
 
@@ -35,10 +37,10 @@ namespace Metricus
 								continue;
 							} else {
 								if (type.GetInterface (pluginType.FullName) != null) {
-									Console.WriteLine ("Type matches interface: " + type.ToString ());
+									//Console.WriteLine ("Type matches interface: " + type.ToString ());
 									pluginTypes.Add (type);
 								} else {
-									Console.WriteLine("Type does not match interface.");
+									//Console.WriteLine("Type does not match interface.");
 								}
 							}
 						}

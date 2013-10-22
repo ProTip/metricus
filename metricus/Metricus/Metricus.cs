@@ -61,19 +61,19 @@ namespace Metricus
 
 		public void RegisterPlugin( Plugin plugin)
 		{
-			Console.WriteLine ("Registering plugin of type: " + plugin.GetType().BaseType);
+			//Console.WriteLine ("Registering plugin of type: " + plugin.GetType().BaseType);
 			switch ((plugin.GetType ().BaseType.ToString())) 
 			{
 			case "Metricus.InputPlugin":
-				Console.WriteLine ("Registering InputPlugin");
+				//Console.WriteLine ("Registering InputPlugin");
 				this.RegisterInputPlugin ((InputPlugin)plugin);
 				break;
 			case "Metricus.OutputPlugin":
-				Console.WriteLine ("Registering OutputPlugin");
+				//Console.WriteLine ("Registering OutputPlugin");
 				this.RegisterOutputPlugin ((OutputPlugin)plugin);
 				break;
 			case "Metricus.FilterPlugin":
-				Console.WriteLine ("Registering FilterPlugin");
+				//Console.WriteLine ("Registering FilterPlugin");
 				this.RegisterFilterPlugin ((FilterPlugin)plugin);
 				break;
 			default:
@@ -85,7 +85,7 @@ namespace Metricus
 		{
 			foreach (Plugin plugin in inputPlugins) 
 			{
-				Console.WriteLine (plugin.GetType ());
+				//Console.WriteLine (plugin.GetType ());
 			}
 		}
 
