@@ -5,24 +5,35 @@ using Metricus.Plugins;
 using System.Threading;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Collections;
 using Topshelf;
+using ServiceStack.Text;
 
 namespace metricus
 {
+	class MetricusConfig
+	{
+		public string Host { get; set; }
+		public int Interval { get; set; }
+	}
+
 	class MetricusService : ServiceControl
 	{
 		readonly System.Timers.Timer _timer;
-
 
 		private PluginManager pluginManager;
 
 		public MetricusService() 
 		{
-			_timer = new System.Timers.Timer (10000);
+			var config = JsonSerializer.DeserializeFromString<MetricusConfig> (File.ReadAllText ("config.json"));
+			Console.WriteLine("Config loaded: {0}", config.Dump() );
+
+			_timer = new System.Timers.Timer (config.Interval);
 			_timer.Elapsed += new ElapsedEventHandler (Tick);
-			pluginManager = new PluginManager ("laptop.co.nz");
+			pluginManager = new PluginManager (config.Host);
 			//Console.WriteLine ("Hello World!");
 		}
 
@@ -42,7 +53,7 @@ namespace metricus
 		private void LoadPlugins()
 		{
 			string[] dllFileNames = null;
-			Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+
 			Console.WriteLine (Directory.GetCurrentDirectory().ToString());
 			if (Directory.Exists ("Plugins")) {
 				//Console.WriteLine ("Loading plugins");
@@ -80,6 +91,7 @@ namespace metricus
 	{
 		public static void Main (string[] args)
 		{
+			Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
 			HostFactory.Run (x =>
 			{
 				x.Service<MetricusService>();
