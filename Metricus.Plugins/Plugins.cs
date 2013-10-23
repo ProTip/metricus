@@ -1,10 +1,13 @@
 using System;
+using System.IO;
 using Metricus;
 using Metricus.Plugins;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Threading;
 using Graphite;
+using ServiceStack.Text;
+using System.Reflection;
 
 namespace Metricus.Pluginz
 {
@@ -96,15 +99,25 @@ namespace Metricus.Pluginz
 
 	public class GraphiteOutputPlugin : OutputPlugin, IOutputPlugin
 	{
+		class GraphiteOutputPluginConfig
+		{
+			public String Hostname { get; set; }
+			public int Port { get; set; }
+		}
+
+
 		private PluginManager pm;
 		private string graphiteHostname;
 		private int graphitePort;
 
 		public GraphiteOutputPlugin(PluginManager pm) : base(pm) 
 		{ 
+			var path = Path.GetDirectoryName (Assembly.GetExecutingAssembly().Location);
+			var config = JsonSerializer.DeserializeFromString<GraphiteOutputPluginConfig> (File.ReadAllText (path + "/GraphiteOutputPlugin.config"));
+			Console.WriteLine ("Loaded config : {0}", config.Dump ());
 			this.pm = pm;
-			graphiteHostname = "10.71.20.201";
-			graphitePort = 2004; 
+			graphiteHostname = config.Hostname;
+			graphitePort = config.Port; 
 		}
 
 		public override void Work(metric theMetric)
@@ -120,4 +133,3 @@ namespace Metricus.Pluginz
 		}
 	}
 }
-

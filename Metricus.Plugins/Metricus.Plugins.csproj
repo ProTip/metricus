@@ -32,6 +32,9 @@
     <Reference Include="System" />
     <Reference Include="Graphite">
       <HintPath>..\packages\Graphite.NET.1.1\lib\net40\Graphite.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text">
+      <HintPath>..\packages\ServiceStack.Text.3.9.69\lib\net35\ServiceStack.Text.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -49,5 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="GraphiteOutputPlugin.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

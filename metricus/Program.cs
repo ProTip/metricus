@@ -54,7 +54,6 @@ namespace metricus
 		{
 			string[] dllFileNames = null;
 
-			Console.WriteLine (Directory.GetCurrentDirectory().ToString());
 			if (Directory.Exists ("Plugins")) {
 				//Console.WriteLine ("Loading plugins");
 				dllFileNames = Directory.GetFiles ("Plugins", "*.dll");
