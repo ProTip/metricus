@@ -97,6 +97,7 @@ namespace metricus
 				x.RunAsLocalSystem();			
 				x.SetServiceName("Metricus");
 				x.SetDescription("Metric collection and ouput service");
+				x.UseNLog();
 			});
 		}
 	}

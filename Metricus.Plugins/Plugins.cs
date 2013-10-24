@@ -122,6 +122,7 @@ namespace Metricus.Pluginz
 
 		public override void Work(metric theMetric)
 		{
+			Console.WriteLine ("Sending graphite metric.");
 			using (var client = new GraphiteUdpClient (graphiteHostname, graphitePort, pm.Hostname )) {
 				var path = theMetric.category;
 				if ( theMetric.instance != "" ) path += "." + theMetric.instance;
