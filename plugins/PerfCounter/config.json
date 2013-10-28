@@ -1,0 +1,12 @@
+{
+  "categories" : [
+    {
+      "name" : "Processor",
+      "counters" : [ "% Processor Time" ]
+    },
+    {
+      "name" : "Memory",
+      "counters" : [ "Available MBytes", "Pages/sec" ]
+    }    
+  ]
+}
