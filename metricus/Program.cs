@@ -1,7 +1,7 @@
 using System;
 using System.Timers;
 using Metricus;
-using Metricus.Plugins;
+using Metricus.Plugin;
 using System.Threading;
 using System.Diagnostics;
 using System.IO;
@@ -12,7 +12,7 @@ using System.Collections;
 using Topshelf;
 using ServiceStack.Text;
 
-namespace metricus
+namespace Metricus
 {
 	class MetricusConfig
 	{
@@ -56,7 +56,9 @@ namespace metricus
 
 			if (Directory.Exists ("Plugins")) {
 				//Console.WriteLine ("Loading plugins");
-				dllFileNames = Directory.GetFiles ("Plugins", "*.dll");
+				foreach (var dir in Directory.GetDirectories("Plugins")) {
+					dllFileNames = Directory.GetFiles ("Plugins", "*.dll");
+				}
 			} else {
 				//Console.WriteLine ("Plugin directory not found!");
 			}
@@ -66,15 +68,19 @@ namespace metricus
 			}
 
 
+			foreach (var dir in Directory.GetDirectories("Plugins")) 
+			{
+				var inputPlugins = PluginLoader<IInputPlugin>.GetPlugins (dir);
+				foreach (Type type in inputPlugins) {
+					Console.WriteLine ("Loading plugin {0}", type.Assembly.GetName ().ToString ());
+					Activator.CreateInstance (type, pluginManager);
+				}
 
-			var inputPlugins = PluginLoader<IInputPlugin>.LoadPlugins ("Plugins");
-			foreach (Type type in inputPlugins) {
-				Activator.CreateInstance(type, pluginManager);
-			}
-
-			var outputPlugins = PluginLoader<IOutputPlugin>.LoadPlugins ("Plugins");
-			foreach (Type type in outputPlugins) {
-				Activator.CreateInstance(type, pluginManager);
+				var outputPlugins = PluginLoader<IOutputPlugin>.GetPlugins (dir);
+				foreach (Type type in outputPlugins) {
+					Console.WriteLine ("Loading plugin {0}", type.Assembly.GetName ().ToString ());
+					Activator.CreateInstance (type, pluginManager);
+				}
 			}
 		}
 
@@ -97,7 +103,7 @@ namespace metricus
 				x.RunAsLocalSystem();			
 				x.SetServiceName("Metricus");
 				x.SetDescription("Metric collection and ouput service");
-				x.UseNLog();
+				//x.UseNLog();
 			});
 		}
 	}

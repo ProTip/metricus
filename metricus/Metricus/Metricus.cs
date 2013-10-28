@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Metricus
+namespace Metricus.Plugin
 {
 	public abstract class Plugin
 	{
@@ -62,18 +62,18 @@ namespace Metricus
 
 		public void RegisterPlugin( Plugin plugin)
 		{
-			//Console.WriteLine ("Registering plugin of type: " + plugin.GetType().BaseType);
+			Console.WriteLine ("Registering plugin of type: " + plugin.GetType().BaseType);
 			switch ((plugin.GetType ().BaseType.ToString())) 
 			{
-			case "Metricus.InputPlugin":
+			case "Metricus.Plugin.InputPlugin":
 				//Console.WriteLine ("Registering InputPlugin");
 				this.RegisterInputPlugin ((InputPlugin)plugin);
 				break;
-			case "Metricus.OutputPlugin":
+			case "Metricus.Plugin.OutputPlugin":
 				//Console.WriteLine ("Registering OutputPlugin");
 				this.RegisterOutputPlugin ((OutputPlugin)plugin);
 				break;
-			case "Metricus.FilterPlugin":
+			case "Metricus.Plugin.FilterPlugin":
 				//Console.WriteLine ("Registering FilterPlugin");
 				this.RegisterFilterPlugin ((FilterPlugin)plugin);
 				break;

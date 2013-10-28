@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metricus", "metricus\metricus.csproj", "{07AD6E55-72F3-4740-8770-A1E36D8EFDA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metricus.Plugins", "Metricus.Plugins\Metricus.Plugins.csproj", "{7D01D952-535D-4A04-8509-8948D501701C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{74EC15EE-266B-41A2-B177-1F72F96F6417}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphiteOut", "Plugins\GraphiteOut\GraphiteOut.csproj", "{E815DB81-9308-4C72-8AEF-E11075B9B239}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerfCounter", "Plugins\PerfCounter\PerfCounter\PerfCounter.csproj", "{7BDD2BA5-C66D-4886-9594-9AB331ACEBB0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleOut", "Plugins\ConsoleOut\ConsoleOut\ConsoleOut.csproj", "{94FFE39A-68F5-43D5-A8E1-A06D5C68C74C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +21,23 @@ Global
 		{07AD6E55-72F3-4740-8770-A1E36D8EFDA3}.Debug|x86.Build.0 = Debug|x86
 		{07AD6E55-72F3-4740-8770-A1E36D8EFDA3}.Release|x86.ActiveCfg = Release|x86
 		{07AD6E55-72F3-4740-8770-A1E36D8EFDA3}.Release|x86.Build.0 = Release|x86
-		{7D01D952-535D-4A04-8509-8948D501701C}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{7D01D952-535D-4A04-8509-8948D501701C}.Debug|x86.Build.0 = Debug|Any CPU
-		{7D01D952-535D-4A04-8509-8948D501701C}.Release|x86.ActiveCfg = Release|Any CPU
-		{7D01D952-535D-4A04-8509-8948D501701C}.Release|x86.Build.0 = Release|Any CPU
+		{7BDD2BA5-C66D-4886-9594-9AB331ACEBB0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7BDD2BA5-C66D-4886-9594-9AB331ACEBB0}.Debug|x86.Build.0 = Debug|Any CPU
+		{7BDD2BA5-C66D-4886-9594-9AB331ACEBB0}.Release|x86.ActiveCfg = Release|Any CPU
+		{7BDD2BA5-C66D-4886-9594-9AB331ACEBB0}.Release|x86.Build.0 = Release|Any CPU
+		{94FFE39A-68F5-43D5-A8E1-A06D5C68C74C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{94FFE39A-68F5-43D5-A8E1-A06D5C68C74C}.Debug|x86.Build.0 = Debug|Any CPU
+		{94FFE39A-68F5-43D5-A8E1-A06D5C68C74C}.Release|x86.ActiveCfg = Release|Any CPU
+		{94FFE39A-68F5-43D5-A8E1-A06D5C68C74C}.Release|x86.Build.0 = Release|Any CPU
+		{E815DB81-9308-4C72-8AEF-E11075B9B239}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E815DB81-9308-4C72-8AEF-E11075B9B239}.Debug|x86.Build.0 = Debug|Any CPU
+		{E815DB81-9308-4C72-8AEF-E11075B9B239}.Release|x86.ActiveCfg = Release|Any CPU
+		{E815DB81-9308-4C72-8AEF-E11075B9B239}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E815DB81-9308-4C72-8AEF-E11075B9B239} = {74EC15EE-266B-41A2-B177-1F72F96F6417}
+		{7BDD2BA5-C66D-4886-9594-9AB331ACEBB0} = {74EC15EE-266B-41A2-B177-1F72F96F6417}
+		{94FFE39A-68F5-43D5-A8E1-A06D5C68C74C} = {74EC15EE-266B-41A2-B177-1F72F96F6417}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = metricus\metricus.csproj

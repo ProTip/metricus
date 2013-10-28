@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Graphite;
 
-namespace Metricus.Plugins
+namespace Metricus.Plugin
 {
 
 	public interface IInputPlugin
@@ -17,7 +17,5 @@ namespace Metricus.Plugins
 	{
 		void Work(metric m);
 	}
-
-
 }
 

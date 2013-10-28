@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Metricus.Plugins;
+using Metricus.Plugin;
 using System.IO;
 using System.Reflection;
 
@@ -8,7 +8,7 @@ namespace Metricus
 {
 	public static class PluginLoader<T>
 	{
-		public static ICollection<Type> LoadPlugins(string path)
+		public static ICollection<Type> GetPlugins(string path)
 		{
 			//Console.WriteLine ("Loading plugins from path {0} in directory {1}", path, Directory.GetCurrentDirectory().ToString());
 			Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
