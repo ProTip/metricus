@@ -36,4 +36,11 @@
     <Compile Include="PerfCounter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\metricus\metricus.csproj">
+      <Project>{07AD6E55-72F3-4740-8770-A1E36D8EFDA3}</Project>
+      <Name>metricus</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
