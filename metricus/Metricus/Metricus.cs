@@ -113,9 +113,9 @@ namespace Metricus.Plugin
 		public int interval;
 		public metric( string theCategory, string theType, string theInstance, float theValue, DateTime theTime, int theInterval=10)
 		{
-			category = Regex.Replace(theCategory,"(\\s+|\\.)","_");
-			type = Regex.Replace(theType,"(\\s+|\\.)","_");
-			instance = Regex.Replace(theInstance,"(\\s+|\\.)","_");
+			category = Regex.Replace(theCategory,"(\\s+|\\.|/)","_");
+			type = Regex.Replace(theType,"(\\s+|\\.|/)","_");
+			instance = Regex.Replace(theInstance,"(\\s+|\\.|/)","_");
 			value = theValue;
 			timestamp = theTime;
 			interval = theInterval;

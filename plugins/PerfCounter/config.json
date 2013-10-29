@@ -2,7 +2,8 @@
   "categories" : [
     {
       "name" : "Processor",
-      "counters" : [ "% Processor Time" ]
+      "counters" : [ "% Processor Time" ],
+      "instances" : [ "_total" ]
     },
     {
       "name" : "Memory",

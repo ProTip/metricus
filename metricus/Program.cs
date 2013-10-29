@@ -18,17 +18,19 @@ namespace Metricus
 	{
 		public string Host { get; set; }
 		public int Interval { get; set; }
+		public List<String> ActivePlugins { get; set; }
 	}
 
 	class MetricusService : ServiceControl
 	{
 		readonly System.Timers.Timer _timer;
 
+		private MetricusConfig config;
 		private PluginManager pluginManager;
 
 		public MetricusService() 
 		{
-			var config = JsonSerializer.DeserializeFromString<MetricusConfig> (File.ReadAllText ("config.json"));
+			config = JsonSerializer.DeserializeFromString<MetricusConfig> (File.ReadAllText ("config.json"));
 			Console.WriteLine("Config loaded: {0}", config.Dump() );
 
 			_timer = new System.Timers.Timer (config.Interval);
@@ -72,14 +74,19 @@ namespace Metricus
 			{
 				var inputPlugins = PluginLoader<IInputPlugin>.GetPlugins (dir);
 				foreach (Type type in inputPlugins) {
-					Console.WriteLine ("Loading plugin {0}", type.Assembly.GetName ().ToString ());
-					Activator.CreateInstance (type, pluginManager);
+
+					if (config.ActivePlugins.Contains (type.Assembly.GetName ().Name)) { 
+						Console.WriteLine ("Loading plugin {0}", type.Assembly.GetName ().Name);
+						Activator.CreateInstance (type, pluginManager);
+					}
 				}
 
 				var outputPlugins = PluginLoader<IOutputPlugin>.GetPlugins (dir);
 				foreach (Type type in outputPlugins) {
-					Console.WriteLine ("Loading plugin {0}", type.Assembly.GetName ().ToString ());
-					Activator.CreateInstance (type, pluginManager);
+					if (config.ActivePlugins.Contains (type.Assembly.GetName ().Name)) {
+						Console.WriteLine ("Loading plugin {0}", type.Assembly.GetName ().Name);
+						Activator.CreateInstance (type, pluginManager);
+					}
 				}
 			}
 		}

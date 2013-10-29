@@ -35,7 +35,8 @@ namespace Metricus.Plugins
 			Console.WriteLine ("Sending graphite metric.");
 			using (var client = new GraphiteUdpClient (graphiteHostname, graphitePort, pm.Hostname )) {
 				var path = theMetric.category;
-				if ( theMetric.instance != "" ) path += "." + theMetric.instance;
+				//if ( theMetric.instance != "" ) path += "." + theMetric.instance;
+				path += (theMetric.instance != "") ? "." + theMetric.instance : ".total";
 				path += "." + theMetric.type;
 				path = path.ToLower ();
 				client.Send(path, (int)theMetric.value);
