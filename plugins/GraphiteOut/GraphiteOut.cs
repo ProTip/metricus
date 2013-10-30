@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using Graphite;
 using System.IO;
 using System.Reflection;
@@ -33,6 +34,7 @@ namespace Metricus.Plugins
 		public override void Work(metric theMetric)
 		{
 			Console.WriteLine ("Sending graphite metric.");
+			this.FormatMetric (ref theMetric);
 			using (var client = new GraphiteUdpClient (graphiteHostname, graphitePort, pm.Hostname )) {
 				var path = theMetric.category;
 				//if ( theMetric.instance != "" ) path += "." + theMetric.instance;
@@ -42,6 +44,13 @@ namespace Metricus.Plugins
 				client.Send(path, (int)theMetric.value);
 			}
 
+		}
+
+		private void FormatMetric(ref metric m)
+		{
+			m.category = Regex.Replace(m.category,"(\\s+|\\.|/)","_");
+			m.type = Regex.Replace(m.type,"(\\s+|\\.|/)","_");
+			m.instance = Regex.Replace(m.instance,"(\\s+|\\.|/)","_");
 		}
 	}
 }

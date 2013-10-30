@@ -9,7 +9,7 @@ namespace Metricus.Plugins
 
 		public override void Work(metric theMetric)
 		{
-			Console.WriteLine ("{1}.{2}.{3} : {0}", theMetric.value,theMetric.category,theMetric.instance,theMetric.type);
+			Console.WriteLine ("Category: {1}\nInstance: {2}\nType: {3}\nValue: {0}", theMetric.value,theMetric.category,theMetric.instance,theMetric.type);
 		}
 	}
 }

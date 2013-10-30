@@ -17,5 +17,9 @@ namespace Metricus.Plugin
 	{
 		void Work(metric m);
 	}
-}
 
+	public interface IFilterPlugin
+	{
+		List<metric> Work(List<metric> m);
+	}
+}

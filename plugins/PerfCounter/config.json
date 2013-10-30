@@ -8,6 +8,10 @@
     {
       "name" : "Memory",
       "counters" : [ "Available MBytes", "Pages/sec" ]
-    }    
+    },
+    {
+      "name" : "ASP.NET Applications",
+      "counters" : [ "Requests/Sec", "Request Execution Time" ]
+    }     
   ]
 }
