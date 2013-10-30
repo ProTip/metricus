@@ -11,7 +11,6 @@ namespace Metricus.Plugins
 {
 	public class PerfCounter : InputPlugin, IInputPlugin
 	{
-		private List<PerformanceCounter> performanceCounters = new List<PerformanceCounter>();
 		private List<Category> categories = new List<Category>();
 		private PerfCounterConfig config;
 
@@ -37,6 +36,7 @@ namespace Metricus.Plugins
 		private class Category {
 			public String name { get; set; }
 			public Dictionary<Tuple<String, String>, PerformanceCounter> counters { get; set; }
+			public List<String> counterNames { get; set; }
 			public bool dynamic { get; set; }
 
 			public Category(string name) {
@@ -59,6 +59,17 @@ namespace Metricus.Plugins
 					counters.Remove (key);
 				}
 			}
+
+			public void LoadInstances() {
+				Console.WriteLine ("Loading instances for category {0}", this.name);
+				var category = new PerformanceCounterCategory (this.name);
+				var instanceNames = category.GetInstanceNames ();
+				foreach (var instance in instanceNames) {
+					foreach( var counterName in this.counterNames){
+						this.RegisterCounter (counterName, instance);
+					}
+				}
+			}
 		}
 
 		public override List<metric> Work()
@@ -67,33 +78,38 @@ namespace Metricus.Plugins
 
 			foreach( var category in this.categories )
 			{
+				var staleCounterKeys = new List<Tuple<String,String>> ();
 				foreach (var counter in category.counters) {
 					var pc = counter.Value;
 					try {
-						metrics.Add (new metric (pc.CategoryName, pc.CounterName, pc.InstanceName, pc.NextValue (), DateTime.Now));
+						var newMetric = new metric (pc.CategoryName, pc.CounterName, pc.InstanceName, pc.NextValue (), DateTime.Now);
+						metrics.Add (newMetric);
 					} catch (Exception e) {
-						Console.WriteLine (e.Message);
+						Console.WriteLine ("{0} {1}", e.GetType (), e.Message);
+						if (e.Message.Contains ("does not exist in the specified Category")) {
+							staleCounterKeys.Add (counter.Key);
+							continue;
+						}
 					}
+				}
+
+				if (category.dynamic) category.LoadInstances ();						
+				foreach (var staleCounterKey in staleCounterKeys) {
+					category.UnRegisterCounter (staleCounterKey.Item1, staleCounterKey.Item2);
 				}
 			}
 			return metrics;
 		}
 
-		private void RegisterPerformanceCounters(PerformanceCounter performanceCoutner)
-		{
-			performanceCoutner.NextValue ();
-			this.performanceCounters.Add (performanceCoutner);
-		}
-
 		private void LoadCounters()
 		{
 			var pcList = new List<PerformanceCounter>();
-//			pcList.Add (new PerformanceCounter ("Processor", "% Processor Time", "_Total"));		          
-//			pcList.Add (new PerformanceCounter ("Memory", "Available MBytes"));
-//			foreach (var pc in pcList) { this.RegisterPerformanceCounters (pc); }
 
 			foreach (var configCategory in config.categories) {
 				var newCategory = new Category (configCategory.name);
+				var performanceCategory = new PerformanceCounterCategory (configCategory.name);
+				newCategory.dynamic = configCategory.dynamic;
+				newCategory.counterNames = configCategory.counters;
 				foreach (var counter in configCategory.counters) {
 					if (configCategory.instances != null) {
 						foreach (var configInstance in configCategory.instances) {
@@ -101,8 +117,7 @@ namespace Metricus.Plugins
 							newCategory.RegisterCounter (counter, configInstance);
 						}
 					} else {
-						var category = new PerformanceCounterCategory (configCategory.name);
-						var instanceNames = category.GetInstanceNames ();
+						var instanceNames = performanceCategory.GetInstanceNames ();
 						if (instanceNames.Length == 0) {
 							newCategory.RegisterCounter (counter);
 						} else {
@@ -114,28 +129,6 @@ namespace Metricus.Plugins
 				}
 				this.categories.Add (newCategory);	
 			}
-
-
-//			foreach (var cat in config.categories) {
-//				foreach (var counter in cat.counters) {
-//					if (  cat.instances != null ) {
-//						foreach (var instance in cat.instances) {
-//							this.RegisterPerformanceCounters (new PerformanceCounter (cat.name, counter, instance));
-//						}
-//					} else {
-//						var category = new PerformanceCounterCategory (cat.name);
-//						var instanceNames = category.GetInstanceNames ();
-//						if (instanceNames.Length == 0) {
-//							this.RegisterPerformanceCounters (new PerformanceCounter (cat.name, counter));
-//						} else {
-//							foreach (var instance in instanceNames) {
-//								this.RegisterPerformanceCounters (new PerformanceCounter (cat.name, counter, instance));
-//							}
-//						}						
-//					}
-//				}
-//			}
-
 		}
 	}
 }

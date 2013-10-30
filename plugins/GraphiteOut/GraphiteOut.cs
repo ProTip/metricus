@@ -33,7 +33,6 @@ namespace Metricus.Plugins
 
 		public override void Work(metric theMetric)
 		{
-			Console.WriteLine ("Sending graphite metric.");
 			this.FormatMetric (ref theMetric);
 			using (var client = new GraphiteUdpClient (graphiteHostname, graphitePort, pm.Hostname )) {
 				var path = theMetric.category;

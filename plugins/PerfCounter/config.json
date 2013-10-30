@@ -12,6 +12,21 @@
     {
       "name" : "ASP.NET Applications",
       "counters" : [ "Requests/Sec", "Request Execution Time" ]
-    }     
+    },
+    {
+      "name" : "PhysicalDisk",
+      "dynamic" : True,
+      "counters" : [ "Split IO/Sec" ]
+    },
+    { 
+      "name" : "USB",
+      "dynamic" : True,
+      "counters" : [ "Bulk Bytes/Sec" ]
+    },
+    {
+      "name" : "Process",
+      "dynamic" : True,
+      "counters" : [ "% Processor Time" ]
+    }
   ]
 }
