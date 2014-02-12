@@ -46,6 +46,13 @@ namespace Metricus
 			return true;
 		}
 
+		public bool StartRaw()
+		{
+			this.LoadPlugins ();
+			_timer.Start ();
+			return true;
+		}
+
 		public bool Stop(HostControl hostControl)
 		{
 			_timer.Stop ();
@@ -57,25 +64,27 @@ namespace Metricus
 			string[] dllFileNames = null;
 
 			if (Directory.Exists ("Plugins")) {
-				//Console.WriteLine ("Loading plugins");
+				Console.WriteLine ("Loading plugins");
 				foreach (var dir in Directory.GetDirectories("Plugins")) {
+
 					dllFileNames = Directory.GetFiles ("Plugins", "*.dll");
 				}
 			} else {
-				//Console.WriteLine ("Plugin directory not found!");
+				Console.WriteLine ("Plugin directory not found!");
 			}
 
 			foreach (var plugin in dllFileNames) {
-				//Console.WriteLine (plugin);
+				Console.WriteLine (plugin);
 			}
 
 
 			foreach (var dir in Directory.GetDirectories("Plugins")) 
 			{
 				var inputPlugins = PluginLoader<IInputPlugin>.GetPlugins (dir);
+				Console.WriteLine (dir.ToString());
 				foreach (Type type in inputPlugins) {
-
-					if (config.ActivePlugins.Contains (type.Assembly.GetName ().Name)) { 
+					Console.WriteLine (type.Assembly.GetName ().Name);
+					if (config.ActivePlugins.Contains (type.Assembly.GetName ().Name)) {
 						Console.WriteLine ("Loading plugin {0}", type.Assembly.GetName ().Name);
 						Activator.CreateInstance (type, pluginManager);
 					}
@@ -93,6 +102,7 @@ namespace Metricus
 
 		private void Tick (object source, ElapsedEventArgs e)
 		{
+			Console.WriteLine ("Tick");
 			var start = DateTime.Now;
 			this.pluginManager.Tick ();
 			var elapsed = DateTime.Now - start;

@@ -7,7 +7,7 @@
     },
     {
       "name" : "Memory",
-      "counters" : [ "Available MBytes", "Pages/sec" ]
+      "counters" : [ "Pages/sec" ]
     },
     {
       "name" : "ASP.NET Applications",
@@ -18,15 +18,14 @@
       "dynamic" : True,
       "counters" : [ "Split IO/Sec" ]
     },
-    { 
-      "name" : "USB",
-      "dynamic" : True,
-      "counters" : [ "Bulk Bytes/Sec" ]
-    },
     {
       "name" : "Process",
       "dynamic" : True,
       "counters" : [ "% Processor Time" ]
+    },
+    { "name" : ".NET CLR Memory",
+      "dynamic" : True,
+      "counters" : [ "% Time in GC" ]
     }
   ]
 }
