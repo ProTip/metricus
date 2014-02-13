@@ -17,7 +17,7 @@ Configuration is handled through config.json files.  The ~~daemon~~ service conf
 
 ####Service Configuration
 
-````
+```json
 {
   "Host" : "laptop_co_nz",
   "Interval" : "10000",
@@ -28,4 +28,4 @@ Configuration is handled through config.json files.  The ~~daemon~~ service conf
   ]
 }
 
-````
+```
