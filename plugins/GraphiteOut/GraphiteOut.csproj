@@ -9,6 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>GraphiteOut</RootNamespace>
     <AssemblyName>GraphiteOut</AssemblyName>
+    <ReleaseVersion>0.2</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +22,7 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>..\..\metricus\bin\Release\Plugins\GraphiteOut</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -52,6 +53,7 @@
     <ProjectReference Include="..\..\PluginInterface\PluginInterface.csproj">
       <Project>{2BD4850D-9B86-4C78-9026-7EA8F70CA8FB}</Project>
       <Name>PluginInterface</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
 </Project>

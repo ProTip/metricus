@@ -9,6 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>ConsoleOut</RootNamespace>
     <AssemblyName>ConsoleOut</AssemblyName>
+    <ReleaseVersion>0.2</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,6 +46,7 @@
     <ProjectReference Include="..\..\PluginInterface\PluginInterface.csproj">
       <Project>{2BD4850D-9B86-4C78-9026-7EA8F70CA8FB}</Project>
       <Name>PluginInterface</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
 </Project>

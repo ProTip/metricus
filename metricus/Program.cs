@@ -36,7 +36,6 @@ namespace Metricus
 			_timer = new System.Timers.Timer (config.Interval);
 			_timer.Elapsed += new ElapsedEventHandler (Tick);
 			pluginManager = new PluginManager (config.Host);
-			//Console.WriteLine ("Hello World!");
 		}
 
 		public bool Start(HostControl hostControl)

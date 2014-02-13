@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphiteOut", "Plugins\Grap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleOut", "Plugins\ConsoleOut\ConsoleOut.csproj", "{2AAB72B7-A5D5-47CD-9A08-9D6AE4A79397}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerfCounter", "Plugins\PerfCounter\PerfCounter.csproj", "{E4C09C8B-05AB-41B7-A243-AE6F049A5C37}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerformanceCounter", "Plugins\PerfCounter\PerformanceCounter.csproj", "{E4C09C8B-05AB-41B7-A243-AE6F049A5C37}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metricus", "metricus\metricus.csproj", "{3E5AD71F-D803-4559-89F6-1D3670BDEDC0}"
 EndProject
@@ -47,5 +47,6 @@ Global
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = metricus\metricus.csproj
+		version = 0.2
 	EndGlobalSection
 EndGlobal

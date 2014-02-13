@@ -33,10 +33,10 @@ namespace Metricus.Plugins
 
 		public override void Work(metric theMetric)
 		{
+			//TODO: This client sends one packet per metric?!
 			this.FormatMetric (ref theMetric);
 			using (var client = new GraphiteUdpClient (graphiteHostname, graphitePort, pm.Hostname )) {
 				var path = theMetric.category;
-				//if ( theMetric.instance != "" ) path += "." + theMetric.instance;
 				path += (theMetric.instance != "") ? "." + theMetric.instance : ".total";
 				path += "." + theMetric.type;
 				path = path.ToLower ();
