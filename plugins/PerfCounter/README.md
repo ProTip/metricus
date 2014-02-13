@@ -34,6 +34,7 @@ This plugin's configuration is centered around "categories", and it supports a f
 ```
 
 ####Category->Counters->Instances
+You know the counters and the instances you want to collect.  Everything is explicitly configured.
 ```json
 "categories" : [
     {
@@ -42,9 +43,8 @@ This plugin's configuration is centered around "categories", and it supports a f
       "instances" : [ "_total" ]
     },
 ```
-You know the counters and the instances you want to collect.  Everything is explicitly configured.
-
 ####Category->Counters
+You know the counters you want but they either do not have instances, the prior, or you want all the instances, the latter.  This is a two-for.
 ```json
     {
       "name" : "Memory",
@@ -55,9 +55,8 @@ You know the counters and the instances you want to collect.  Everything is expl
       "counters" : [ "Requests/Sec", "Request Execution Time" ]
     },
 ```
-You know the counters you want but they either do not have instances, the prior, or you want all the instances, the latter.  This is a two-for.
-
 ####Dynamic
+Some categoies have dynamic instances.  In the case of disks if a new disk is added, or a disk is removed, the instances available will change.  Setting dynamic to true currently loads the instance list every interval and collects all counters on all of them.
 ```json
 {
       "name" : "PhysicalDisk",
@@ -65,4 +64,3 @@ You know the counters you want but they either do not have instances, the prior,
       "counters" : [ "Split IO/Sec" ]
     },
 ```
-Some categoies have dynamic instances.  In the case of disks if a new disk is added, or a disk is removed, the instances available will change.  Setting dynamic to true currently loads the instance list every interval and collects all counters on all of them.
