@@ -28,7 +28,7 @@ This plugin's configuration is centered around "categories", and it supports a f
       "dynamic" : True,
       "counters" : [ "Split IO/Sec" ]
     },
-  [
+  ]
 }
 
 ```
