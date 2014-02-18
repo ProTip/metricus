@@ -50,9 +50,16 @@ namespace Metricus.Plugins
 				Console.WriteLine ("Registering counter {0} : {1} : {2}", this.name, counterName, instanceName);
 				var key = Tuple.Create (counterName, instanceName);
 				if( ! counters.ContainsKey(key) ) {
-					var counter = new PerformanceCounter (this.name, counterName, instanceName);
-					counter.NextValue ();
-					this.counters.Add (key, counter);
+					try 
+					{
+						var counter = new PerformanceCounter (this.name, counterName, instanceName);
+						counter.NextValue ();
+						this.counters.Add (key, counter);
+					} 
+					catch (Exception e) 
+					{
+						Console.WriteLine ("{0} {1}", e.GetType (), e.Message);
+					}
 				}
 			}
 
