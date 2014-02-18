@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleOut", "Plugins\Conso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerformanceCounter", "Plugins\PerfCounter\PerformanceCounter.csproj", "{E4C09C8B-05AB-41B7-A243-AE6F049A5C37}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SitesFilter", "Plugins\SitesFilter\SitesFilter.csproj", "{184BE9B3-4150-4B1D-9B95-F198FB5C7064}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metricus", "metricus\metricus.csproj", "{3E5AD71F-D803-4559-89F6-1D3670BDEDC0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginInterface", "PluginInterface\PluginInterface.csproj", "{2BD4850D-9B86-4C78-9026-7EA8F70CA8FB}"
@@ -19,6 +21,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{184BE9B3-4150-4B1D-9B95-F198FB5C7064}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{184BE9B3-4150-4B1D-9B95-F198FB5C7064}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{184BE9B3-4150-4B1D-9B95-F198FB5C7064}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{184BE9B3-4150-4B1D-9B95-F198FB5C7064}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2AAB72B7-A5D5-47CD-9A08-9D6AE4A79397}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2AAB72B7-A5D5-47CD-9A08-9D6AE4A79397}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AAB72B7-A5D5-47CD-9A08-9D6AE4A79397}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -44,6 +50,7 @@ Global
 		{E815DB81-9308-4C72-8AEF-E11075B9B239} = {74EC15EE-266B-41A2-B177-1F72F96F6417}
 		{2AAB72B7-A5D5-47CD-9A08-9D6AE4A79397} = {74EC15EE-266B-41A2-B177-1F72F96F6417}
 		{E4C09C8B-05AB-41B7-A243-AE6F049A5C37} = {74EC15EE-266B-41A2-B177-1F72F96F6417}
+		{184BE9B3-4150-4B1D-9B95-F198FB5C7064} = {74EC15EE-266B-41A2-B177-1F72F96F6417}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = metricus\metricus.csproj

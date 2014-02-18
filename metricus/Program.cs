@@ -96,6 +96,14 @@ namespace Metricus
 						Activator.CreateInstance (type, pluginManager);
 					}
 				}
+
+				var filterPlugins = PluginLoader<IFilterPlugin>.GetPlugins (dir);
+				foreach (Type type in filterPlugins) {
+					if (config.ActivePlugins.Contains (type.Assembly.GetName ().Name)) {
+						Console.WriteLine ("Loading plugin {0}", type.Assembly.GetName ().Name);
+						Activator.CreateInstance (type, pluginManager);
+					}
+				}
 			}
 		}
 

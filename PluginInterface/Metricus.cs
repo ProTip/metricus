@@ -42,6 +42,8 @@ namespace Metricus.Plugin
 		public FilterPlugin(PluginManager pm) : base(pm)
 		{
 		}
+
+		public abstract List<metric> Work (List<metric> m);
 	}
 
 	public class PluginManager
@@ -95,6 +97,11 @@ namespace Metricus.Plugin
 			foreach (InputPlugin iPlugin in inputPlugins) 
 			{
 				var results = iPlugin.Work ();
+
+				foreach (FilterPlugin fPlugin in filterPlugins) {
+					results = fPlugin.Work (results);
+				}
+
 				foreach ( OutputPlugin oPlugin in outputPlugins)
 				{
 					foreach(var result in results) { oPlugin.Work (result); }
