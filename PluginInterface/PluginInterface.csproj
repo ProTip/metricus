@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>PluginInterface</RootNamespace>
     <AssemblyName>PluginInterface</AssemblyName>
-    <ReleaseVersion>0.2.0</ReleaseVersion>
+    <ReleaseVersion>0.2.1</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
