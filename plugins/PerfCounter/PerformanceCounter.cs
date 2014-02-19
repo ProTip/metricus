@@ -47,7 +47,7 @@ namespace Metricus.Plugins
 			}
 
 		    public void RegisterCounter(String counterName, String instanceName = "") {
-				Console.WriteLine ("Registering counter {0} : {1} : {2}", this.name, counterName, instanceName);
+				//Console.WriteLine ("Registering counter {0} : {1} : {2}", this.name, counterName, instanceName);
 				var key = Tuple.Create (counterName, instanceName);
 				if( ! counters.ContainsKey(key) ) {
 					try 
@@ -108,6 +108,7 @@ namespace Metricus.Plugins
 					category.UnRegisterCounter (staleCounterKey.Item1, staleCounterKey.Item2);
 				}
 			}
+			Console.WriteLine ("Collected {0} metrics", metrics.Count);
 			return metrics;
 		}
 

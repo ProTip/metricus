@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using ServiceStack.Text;
 using Microsoft.Web.Administration;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace Metricus.Plugin
 {
@@ -14,7 +15,11 @@ namespace Metricus.Plugin
 		private Dictionary<int, string> siteIDtoName;
 
 		private class SitesFilterConfig {
+			public Dictionary<string,ConfigCategory> Categories { get; set; }
+		}
 
+		private class ConfigCategory {
+			public bool PreserveOriginal { get; set; }
 		}
 
 		public SitesFilter(PluginManager pm) : base(pm)	{
@@ -28,22 +33,31 @@ namespace Metricus.Plugin
 		}
 
 		public override List<metric> Work(List<metric> m) {
+			if ( config.Categories.ContainsKey("ASP.NET Applications")) {
+				m = FilterAspNet (m);
+			}
+			return m;
+		}
+
+		public List<metric> FilterAspNet(List<metric> m) {
 			Regex RegexAspNetApplications = new Regex ("_LM_W3SVC");
 			var returnMetrics = new List<metric> ();
 			foreach (var metric in m) {
 				var newMetric = metric;
-				Console.WriteLine ("Filter plugin {0} : {1}", metric.category,metric.instance);
 				if (metric.instance.Contains ("_LM_W3SVC")) {
-					Console.WriteLine ("Found ASP.NET Applications instance!");
 					var matchID = new Regex ("_LM_W3SVC_(\\d+)_");
 					var match = matchID.Match (metric.instance);
 					var id = match.Groups [1].Value;
 					string siteName;
 					if (this.siteIDtoName.TryGetValue (int.Parse (id), out siteName)) {
-						newMetric.instance = siteName;
+						newMetric.instance = Regex.Replace (metric.instance, "_LM_W3SVC_(\\d+)_ROOT_?", siteName + "/");
+						returnMetrics.Add (newMetric);
 					}
+					if (config.Categories ["ASP.NET Applications"].PreserveOriginal)
+						returnMetrics.Add (metric);
+				} else {
+					returnMetrics.Add (newMetric);
 				}
-				returnMetrics.Add (newMetric);
 			}
 			return returnMetrics;
 		}

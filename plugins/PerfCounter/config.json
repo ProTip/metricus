@@ -1,31 +1,9 @@
 {
   "categories" : [
     {
-      "name" : "Processor",
-      "counters" : [ "% Processor Time" ],
-      "instances" : [ "_total" ]
-    },
-    {
-      "name" : "Memory",
-      "counters" : [ "Pages/sec" ]
-    },
-    {
       "name" : "ASP.NET Applications",
+      "dynamic" : True,
       "counters" : [ "Requests/Sec", "Request Execution Time" ]
-    },
-    {
-      "name" : "PhysicalDisk",
-      "dynamic" : True,
-      "counters" : [ "Split IO/Sec" ]
-    },
-    {
-      "name" : "Process",
-      "dynamic" : True,
-      "counters" : [ "% Processor Time" ]
-    },
-    { "name" : ".NET CLR Memory",
-      "dynamic" : True,
-      "counters" : [ "% Time in GC" ]
     }
   ]
 }

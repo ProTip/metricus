@@ -1,9 +1,10 @@
 {
   "Host" : "laptop_co_nz",
-  "Interval" : "3000",
+  "Interval" : "10000",
   "ActivePlugins" : [
   	"PerformanceCounter",
   	"SitesFilter",
+  	"GraphiteOut",
   	"ConsoleOut"
   ]
 }

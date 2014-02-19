@@ -1,3 +1,7 @@
 {
-	"ASP.NET Applications" : "True",
+	"Categories" : {
+		"ASP.NET Applications" : {
+			"PreserveOriginal" : False	
+		}
+	}
 }
