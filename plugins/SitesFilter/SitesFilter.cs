@@ -33,6 +33,7 @@ namespace Metricus.Plugin
 		}
 
 		public override List<metric> Work(List<metric> m) {
+			this.LoadSites ();
 			if ( config.Categories.ContainsKey("ASP.NET Applications")) {
 				m = FilterAspNet (m);
 			}
@@ -63,6 +64,7 @@ namespace Metricus.Plugin
 		}
 		
 		public void LoadSites() {
+			siteIDtoName.Clear ();
 			var mgr = new Microsoft.Web.Administration.ServerManager ();
 			foreach (var site in mgr.Sites) {
 				this.siteIDtoName.Add ((int)site.Id, site.Name);
