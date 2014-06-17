@@ -13,6 +13,7 @@ namespace Metricus.Plugins
 		class GraphiteOutConfig
 		{
 			public String Hostname { get; set; }
+			public String Prefix { get; set; }
 			public int Port { get; set; }
 		}
 
@@ -20,11 +21,12 @@ namespace Metricus.Plugins
 		private PluginManager pm;
 		private string graphiteHostname;
 		private int graphitePort;
+		private GraphiteOutConfig config;
 
 		public GraphiteOut(PluginManager pm) : base(pm) 
 		{ 
 			var path = Path.GetDirectoryName (Assembly.GetExecutingAssembly().Location);
-			var config = JsonSerializer.DeserializeFromString<GraphiteOutConfig> (File.ReadAllText (path + "/config.json"));
+			config = JsonSerializer.DeserializeFromString<GraphiteOutConfig> (File.ReadAllText (path + "/config.json"));
 			Console.WriteLine ("Loaded config : {0}", config.Dump ());
 			this.pm = pm;
 			graphiteHostname = config.Hostname;
@@ -35,7 +37,7 @@ namespace Metricus.Plugins
 		{
 			//TODO: This client sends one packet per metric?!
 			this.FormatMetric (ref theMetric);
-			using (var client = new GraphiteUdpClient (graphiteHostname, graphitePort, pm.Hostname )) {
+			using (var client = new GraphiteUdpClient (graphiteHostname, graphitePort, config.Prefix + "." + pm.Hostname )) {
 				var path = theMetric.category;
 				path += (theMetric.instance != "") ? "." + theMetric.instance : ".total";
 				path += "." + theMetric.type;

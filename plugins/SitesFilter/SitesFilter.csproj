@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>SitesFilter</RootNamespace>
     <AssemblyName>SitesFilter</AssemblyName>
-    <ReleaseVersion>0.2.2</ReleaseVersion>
+    <ReleaseVersion>0.2.3</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
