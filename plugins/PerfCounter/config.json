@@ -4,6 +4,12 @@
       "name" : "ASP.NET Applications",
       "dynamic" : True,
       "counters" : [ "Requests/Sec", "Request Execution Time" ]
-    }
+    },
+	{
+	  "name" : "Process",
+	  "dynamic" : True,
+	  "counters" : [ "ID Process", "% Processor Time" ],
+	  "instance_regex" : "w3wp"
+	}
   ]
 }

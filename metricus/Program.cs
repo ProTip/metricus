@@ -27,6 +27,7 @@ namespace Metricus
 
 		private MetricusConfig config;
 		private PluginManager pluginManager;
+        private Object workLocker = new Object();
 
 		public MetricusService() 
 		{
@@ -110,9 +111,21 @@ namespace Metricus
 		private void Tick (object source, ElapsedEventArgs e)
 		{
 			Console.WriteLine ("Tick");
-			var start = DateTime.Now;
-			this.pluginManager.Tick ();
-			var elapsed = DateTime.Now - start;
+            if (Monitor.TryEnter(workLocker))
+            {
+                try
+                {
+                    var start = DateTime.Now;
+                    this.pluginManager.Tick();
+                    var elapsed = DateTime.Now - start;
+                }
+                finally
+                {
+                    Monitor.Exit(workLocker);
+                }
+            }
+            else
+                return;
 		}
 	}
 

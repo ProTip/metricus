@@ -2,6 +2,9 @@
 	"Categories" : {
 		"ASP.NET Applications" : {
 			"PreserveOriginal" : False	
+		},
+		"Process" : {
+			"PreserveOriginal" : False
 		}
 	}
 }

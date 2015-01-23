@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Collections;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using ServiceStack.Text;
 using Metricus.Plugin;
 
@@ -33,6 +34,7 @@ namespace Metricus.Plugins
 			public bool dynamic { get; set; }
 			public List<String> counters { get; set; }
 			public List<String> instances { get; set; }
+            public string instance_regex { get; set; }
 		}
 
 		private class Category {
@@ -40,6 +42,7 @@ namespace Metricus.Plugins
 			public Dictionary<Tuple<String, String>, PerformanceCounter> counters { get; set; }
 			public List<String> counterNames { get; set; }
 			public bool dynamic { get; set; }
+            public Regex instanceRegex { get; set; }
 
 			public Category(string name) {
 				this.name = name;
@@ -76,7 +79,8 @@ namespace Metricus.Plugins
 				var instanceNames = category.GetInstanceNames ();
 				foreach (var instance in instanceNames) {
 					foreach( var counterName in this.counterNames){
-						this.RegisterCounter (counterName, instance);
+                        if( instanceRegex == null || instanceRegex.IsMatch(instance))
+						    this.RegisterCounter (counterName, instance);
 					}
 				}
 			}
@@ -118,6 +122,8 @@ namespace Metricus.Plugins
 
 			foreach (var configCategory in config.categories) {
 				var newCategory = new Category (configCategory.name);
+                if (!string.IsNullOrEmpty(configCategory.instance_regex))
+                    newCategory.instanceRegex = new Regex(configCategory.instance_regex);
 				var performanceCategory = new PerformanceCounterCategory (configCategory.name);
 				newCategory.dynamic = configCategory.dynamic;
 				newCategory.counterNames = configCategory.counters;
@@ -132,9 +138,7 @@ namespace Metricus.Plugins
 						if (instanceNames.Length == 0) {
 							newCategory.RegisterCounter (counter);
 						} else {
-							foreach (var instance in instanceNames) {
-								newCategory.RegisterCounter (counter, instance);
-							}
+                            newCategory.LoadInstances();
 						}
 					}
 				}
