@@ -55,9 +55,12 @@ namespace Metricus.Plugins
 				if( ! counters.ContainsKey(key) ) {
 					try 
 					{
-						var counter = new PerformanceCounter (this.name, counterName, instanceName);
-						counter.NextValue ();
-						this.counters.Add (key, counter);
+                        if (string.IsNullOrEmpty(instanceName) || (instanceRegex == null || instanceRegex.IsMatch(instanceName)))
+                        {
+                            var counter = new PerformanceCounter(this.name, counterName, instanceName);
+                            counter.NextValue();
+                            this.counters.Add(key, counter);
+                        }
 					} 
 					catch (Exception e) 
 					{
@@ -78,9 +81,8 @@ namespace Metricus.Plugins
 				var category = new PerformanceCounterCategory (this.name);
 				var instanceNames = category.GetInstanceNames ();
 				foreach (var instance in instanceNames) {
-					foreach( var counterName in this.counterNames){
-                        if( instanceRegex == null || instanceRegex.IsMatch(instance))
-						    this.RegisterCounter (counterName, instance);
+					foreach( var counterName in this.counterNames){                        
+						this.RegisterCounter (counterName, instance);
 					}
 				}
 			}
@@ -138,7 +140,8 @@ namespace Metricus.Plugins
 						if (instanceNames.Length == 0) {
 							newCategory.RegisterCounter (counter);
 						} else {
-                            newCategory.LoadInstances();
+                            foreach (var instanceName in instanceNames)
+                                newCategory.RegisterCounter(counter, instanceName);
 						}
 					}
 				}

@@ -23,6 +23,12 @@ namespace Metricus.Plugin
 			public bool PreserveOriginal { get; set; }
 		}
 
+        public class ConfigCategories
+        {
+            public const string AspNetApplications = "ASP.NET Applications";
+            public const string Process = "Process";
+        }
+
 		public SitesFilter(PluginManager pm) : base(pm)	{
 			var path = Path.GetDirectoryName (Assembly.GetExecutingAssembly().Location);
 			var configFile = path + "/config.json";
@@ -35,16 +41,16 @@ namespace Metricus.Plugin
 
 		public override List<metric> Work(List<metric> m) {
 			this.LoadSites ();
-			if ( config.Categories.ContainsKey("ASP.NET Applications"))
-				m = FilterAspNet (m);
-            if ( config.Categories.ContainsKey("Process"))
-                m = WorkerPoolFilter.Filter(m, config.Categories["Process"].PreserveOriginal);
+            if (config.Categories.ContainsKey(ConfigCategories.AspNetApplications))
+                m = FilterAspNetC.Filter(m, this.siteIDtoName, config.Categories[ConfigCategories.AspNetApplications].PreserveOriginal);
+            if ( config.Categories.ContainsKey(ConfigCategories.Process))
+                m = WorkerPoolFilter.Filter(m, config.Categories[ConfigCategories.Process].PreserveOriginal);
 			return m;
 		}
 
         public class FilterWorkerPoolProcesses
         {
-            public static string IdCategory = "Process";
+            public static string IdCategory = ConfigCategories.Process;
             public static string IdCounter = "ID Process";
             public static Regex MatchW3WP = new Regex("^w3wp");
             public Dictionary<string, int> WpNamesToIds = new Dictionary<string, int>();
@@ -79,9 +85,6 @@ namespace Metricus.Plugin
             }
         }
 
-
-
-
         public class FilterAspNetC
         {
             private static string PathSansId = "_LM_W3SVC";
@@ -113,29 +116,6 @@ namespace Metricus.Plugin
                 return returnMetrics;
             }
         }
-
-		public List<metric> FilterAspNet(List<metric> m) {
-			Regex RegexAspNetApplications = new Regex ("_LM_W3SVC");
-			var returnMetrics = new List<metric> ();
-			foreach (var metric in m) {
-				var newMetric = metric;
-				if (metric.instance.Contains ("_LM_W3SVC")) {
-					var matchID = new Regex ("_LM_W3SVC_(\\d+)_");
-					var match = matchID.Match (metric.instance);
-					var id = match.Groups [1].Value;
-					string siteName;
-					if (this.siteIDtoName.TryGetValue (int.Parse (id), out siteName)) {
-						newMetric.instance = Regex.Replace (metric.instance, "_LM_W3SVC_(\\d+)_ROOT_?", siteName + "/");
-						returnMetrics.Add (newMetric);
-					}
-					if (config.Categories ["ASP.NET Applications"].PreserveOriginal)
-						returnMetrics.Add (metric);
-				} else {
-					returnMetrics.Add (newMetric);
-				}
-			}
-			return returnMetrics;
-		}
 		
 		public void LoadSites() {
 			siteIDtoName.Clear ();
