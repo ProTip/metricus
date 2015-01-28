@@ -91,14 +91,14 @@ namespace Metricus.Plugins
 		public override List<metric> Work()
 		{
 			var metrics = new List<metric>();
-
+            var time = DateTime.Now;
 			foreach( var category in this.categories )
 			{
 				var staleCounterKeys = new List<Tuple<String,String>> ();
 				foreach (var counter in category.counters) {
 					var pc = counter.Value;
 					try {
-						var newMetric = new metric (pc.CategoryName, pc.CounterName, pc.InstanceName, pc.NextValue (), DateTime.Now);
+						var newMetric = new metric (pc.CategoryName, pc.CounterName, pc.InstanceName, pc.NextValue (), time);
 						metrics.Add (newMetric);
 					} catch (Exception e) {
 						Console.WriteLine ("{0} {1}", e.GetType (), e.Message);

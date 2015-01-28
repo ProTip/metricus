@@ -14,7 +14,7 @@ namespace Metricus.Plugin
 
 	public interface IOutputPlugin
 	{
-		void Work(metric m);
+		void Work(List<metric> m);
 	}
 
 	public interface IFilterPlugin

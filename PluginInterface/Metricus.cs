@@ -34,7 +34,7 @@ namespace Metricus.Plugin
 		{
 		}
 
-		public abstract void Work (metric outputString);
+		public abstract void Work (List<metric> m);
 	}
 
 	public abstract class FilterPlugin : Plugin
@@ -104,7 +104,7 @@ namespace Metricus.Plugin
 
 				foreach ( OutputPlugin oPlugin in outputPlugins)
 				{
-					foreach(var result in results) { oPlugin.Work (result); }
+                    oPlugin.Work(results);
 				}
 			}
 		}

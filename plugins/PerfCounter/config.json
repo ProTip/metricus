@@ -8,8 +8,7 @@
 	{
 	  "name" : "Process",
 	  "dynamic" : True,
-	  "counters" : [ "ID Process", "% Processor Time" ],
-	  "instance_regex" : "w3wp"
+	  "counters" : [ "ID Process", "% Processor Time" ]
 	}
   ]
 }

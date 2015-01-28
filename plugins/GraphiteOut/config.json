@@ -1,5 +1,7 @@
 {
-  "Hostname" : "192.168.1.2",
-  "Port" : "2003",
-  "Prefix" : "natasha.development.servers"
+  "Hostname" : "192.168.1.50",
+  "Port" : "2010",
+  "Prefix" : "natasha.development.servers",
+  "SendBufferSize" : 500000,
+  "Protocol" : "tcp"
 }
