@@ -62,6 +62,9 @@ Global
 		{E4C09C8B-05AB-41B7-A243-AE6F049A5C37} = {74EC15EE-266B-41A2-B177-1F72F96F6417}
 		{184BE9B3-4150-4B1D-9B95-F198FB5C7064} = {74EC15EE-266B-41A2-B177-1F72F96F6417}
 	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = metricus\metricus.csproj
 		version = 0.2.3

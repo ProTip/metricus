@@ -3,12 +3,15 @@
     {
       "name" : "ASP.NET Applications",
       "dynamic" : True,
+	  "dynamic_interval" : 30000,
       "counters" : [ "Requests/Sec", "Request Execution Time" ]
     },
 	{
 	  "name" : "Process",
 	  "dynamic" : True,
-	  "counters" : [ "ID Process", "% Processor Time" ]
+	  "dynamic_interval" : 30000,
+	  "counters" : [ "ID Process", "% Processor Time" ],
+	  "instance_regex" : "^w3wp"
 	}
   ]
 }

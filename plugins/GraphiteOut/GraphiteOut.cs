@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using Metricus.Plugin;
 using ServiceStack.Text;
+using Graphite;
 
 namespace Metricus.Plugins
 {
@@ -19,13 +20,14 @@ namespace Metricus.Plugins
             public String Hostname { get; set; }
             public String Prefix { get; set; }
             public int Port { get; set; }
-            public int Protocol { get; set; }
+            public string Protocol { get; set; }
             public int SendBufferSize { get; set; }
         }
 
         private PluginManager pm;
         private GraphiteOutConfig config;
-        private GraphiteTcpClient tcpClient;
+        private MetricusGraphiteTcpClient tcpClient;
+        private GraphiteUdpClient udpClient;
         private BlockingCollection<metric> MetricSpool;
         private Task WorkMetricTask;
         private int DefaultSendBufferSize = 1000;
@@ -49,31 +51,46 @@ namespace Metricus.Plugins
 
         private void WorkMetrics()
         {
+            Action<metric> shipMethod;
+            switch(config.Protocol.ToLower())
+            {
+                case "tcp":
+                    shipMethod = (m) => ShipMetricTCP(m); break;
+                case "udp":
+                    shipMethod = (m) => ShipMetricUDP(m); break;
+                default:
+                    shipMethod = (m) => ShipMetricUDP(m); break;
+            }
+
             Boolean done = false;
             while (!done)
             {
                 foreach (var rawMetric in MetricSpool.GetConsumingEnumerable())
                 {
-                    ShipMetric(rawMetric);
+                    shipMethod(rawMetric);
                 }
             }
         }
 
-        private void ShipMetric(metric m)
+        private void ShipMetricUDP(metric m)
+        {
+            udpClient = udpClient ?? new GraphiteUdpClient(config.Hostname, config.Port, config.Prefix + "." + pm.Hostname);
+            var theMetric = FormatMetric(m);
+            var path = MetricPath(theMetric);
+            udpClient.Send(path, (int)m.value);
+        }
+
+        private void ShipMetricTCP(metric m)
         {
             bool sent = false;
             while (!sent)
             {
                 try
                 {
-                    tcpClient = tcpClient ?? new GraphiteTcpClient(config.Hostname, config.Port, config.Prefix + "." + pm.Hostname);
+                    tcpClient = tcpClient ?? new MetricusGraphiteTcpClient(config.Hostname, config.Port, config.Prefix + "." + pm.Hostname);
                     var theMetric = FormatMetric(m);
-                    var path = theMetric.category;
-                    path += (theMetric.instance != "") ? "." + theMetric.instance : ".total";
-                    path += "." + theMetric.type;
-                    path = path.ToLower();
-                    tcpClient.Send(path, (int)m.value);
-                    Console.WriteLine(path);
+                    var path = MetricPath(theMetric);
+                    tcpClient.Send(path, m.value);
                     sent = true;
                 }
                 catch (Exception e) //There has been some sort of error with the client
@@ -86,6 +103,14 @@ namespace Metricus.Plugins
             }
         }
 
+        private string MetricPath(metric m)
+        {
+            var path = m.category;
+            path += (m.instance != "") ? "." + m.instance : ".total";
+            path += "." + m.type;
+            return path.ToLower();
+        }
+
         private metric FormatMetric(metric m)
         {
             m.category = Regex.Replace(m.category, "(\\s+|\\.|/)", "_");
@@ -94,7 +119,7 @@ namespace Metricus.Plugins
             return m;
         }
 
-        public class GraphiteTcpClient : IDisposable
+        public class MetricusGraphiteTcpClient : IDisposable
         {
             public string Hostname { get; private set; }
             public int Port { get; private set; }
@@ -102,7 +127,7 @@ namespace Metricus.Plugins
 
             private readonly TcpClient _tcpClient;
 
-            public GraphiteTcpClient(string hostname, int port = 2003, string keyPrefix = null)
+            public MetricusGraphiteTcpClient(string hostname, int port = 2003, string keyPrefix = null)
             {
                 Hostname = hostname;
                 Port = port;
@@ -110,16 +135,16 @@ namespace Metricus.Plugins
                 _tcpClient = new TcpClient(Hostname, Port);
             }
 
-            public void Send(string path, int value)
+            public void Send(string path, float value)
             {
                 Send(path, value, DateTime.UtcNow);
             }
 
-            public void Send(string path, int value, DateTime timeStamp)
+            public void Send(string path, float value, DateTime timeStamp)
             {
                     if (!string.IsNullOrWhiteSpace(KeyPrefix))
                         path = KeyPrefix + "." + path;
-                    var message = Encoding.UTF8.GetBytes(string.Format("{0} {1} {2}\n", path, value, timeStamp.ToUnixTime()));
+                    var message = Encoding.UTF8.GetBytes(string.Format("{0} {1} {2}\n", path, value, ServiceStack.Text.DateTimeExtensions.ToUnixTime(timeStamp.ToUniversalTime())));
                     _tcpClient.GetStream().Write(message, 0, message.Length);
             }
 
