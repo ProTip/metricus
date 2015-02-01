@@ -31,6 +31,8 @@ namespace Metricus.Plugins
         private BlockingCollection<metric> MetricSpool;
         private Task WorkMetricTask;
         private int DefaultSendBufferSize = 1000;
+        public static readonly string FormatReplacementMatch = "(\\s+|\\.|/|\\(|\\))";
+        public static readonly string FormatReplacementString = "_";
 
         public GraphiteOut(PluginManager pm)
             : base(pm)
@@ -113,9 +115,9 @@ namespace Metricus.Plugins
 
         private metric FormatMetric(metric m)
         {
-            m.category = Regex.Replace(m.category, "(\\s+|\\.|/)", "_");
-            m.type = Regex.Replace(m.type, "(\\s+|\\.|/)", "_");
-            m.instance = Regex.Replace(m.instance, "(\\s+|\\.|/)", "_");
+            m.category = Regex.Replace(m.category, FormatReplacementMatch, FormatReplacementString);
+            m.type = Regex.Replace(m.type, FormatReplacementMatch, FormatReplacementString);
+            m.instance = Regex.Replace(m.instance, FormatReplacementMatch, FormatReplacementString);
             return m;
         }
 
