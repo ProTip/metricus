@@ -13,7 +13,9 @@ namespace Metricus.Plugin
 	{
 		private SitesFilterConfig config;
 		private Dictionary<int, string> siteIDtoName;
-        private FilterWorkerPoolProcesses WorkerPoolFilter = new FilterWorkerPoolProcesses();
+        private ServerManager ServerManager;
+        private System.Timers.Timer LoadSitesTimer;
+        private Object RefreshLock = new Object();
 
 		private class SitesFilterConfig {
 			public Dictionary<string,ConfigCategory> Categories { get; set; }
@@ -37,14 +39,21 @@ namespace Metricus.Plugin
 			Console.WriteLine ("Loaded config : {0}", config.Dump ());
 			siteIDtoName = new Dictionary<int, string> ();
 			this.LoadSites ();
+            LoadSitesTimer = new System.Timers.Timer(60000);
+            LoadSitesTimer.Elapsed += (o, e) => this.LoadSites();
+            LoadSitesTimer.Start();
 		}
 
 		public override List<metric> Work(List<metric> m) {
-			this.LoadSites ();
-            if (config.Categories.ContainsKey(ConfigCategories.AspNetApplications))
-                m = FilterAspNetC.Filter(m, this.siteIDtoName, config.Categories[ConfigCategories.AspNetApplications].PreserveOriginal);
-            if ( config.Categories.ContainsKey(ConfigCategories.Process))
-                m = WorkerPoolFilter.Filter(m, config.Categories[ConfigCategories.Process].PreserveOriginal);
+            lock(RefreshLock)
+            {
+                if (config.Categories.ContainsKey(ConfigCategories.AspNetApplications))
+                {
+                    m = FilterAspNetC.Filter(m, this.siteIDtoName, config.Categories[ConfigCategories.AspNetApplications].PreserveOriginal);
+                }
+                if (config.Categories.ContainsKey(ConfigCategories.Process))
+                    m = FilterWorkerPoolProcesses.Filter(m, ServerManager, config.Categories[ConfigCategories.Process].PreserveOriginal);
+            }
 			return m;
 		}
 
@@ -52,36 +61,44 @@ namespace Metricus.Plugin
         {
             public static string IdCategory = ConfigCategories.Process;
             public static string IdCounter = "ID Process";
-            public static Regex MatchW3WP = new Regex("^w3wp");
-            public Dictionary<string, int> WpNamesToIds = new Dictionary<string, int>();
+            public static Dictionary<string, int> WpNamesToIds = new Dictionary<string, int>();
 
-            public List<metric> Filter(List<metric> metrics, bool preserveOriginal)
+            public static List<metric> Filter(List<metric> metrics, ServerManager serverManager,bool preserveOriginal)
             {
-                var ServerManager = new ServerManager();
-                var returnMetrics = new List<metric>();
                 // "Listen" to the process id counters to map instance names to process id's
-                foreach (var m in metrics)
+                metric m;
+                int wpId;
+                var originalMetricsCount = metrics.Count;                
+                for (int x = 0; x < originalMetricsCount;x++ )
                 {
-                    if (m.category == IdCategory && m.type == IdCounter)
+                    m = metrics[x];
+                    if (m.category != IdCategory)
+                        continue;
+                    if (m.type == IdCounter)
                     {
                         WpNamesToIds[m.instance] = (int)m.value;
                         continue;
                     }
 
-                    if (MatchW3WP.IsMatch(m.instance) && WpNamesToIds.ContainsKey(m.instance))
+                    if (m.instance.StartsWith("w3wp", StringComparison.Ordinal) && WpNamesToIds.TryGetValue(m.instance, out wpId))
                     {
-                        var newMetric = m;
-                        var workerPool = ServerManager.WorkerProcesses.SingleOrDefault(wp => wp.ProcessId == WpNamesToIds[m.instance]);
-                        if (workerPool != null)
-                            newMetric.instance = workerPool.AppPoolName;
-                        returnMetrics.Add(newMetric);
-                        if (preserveOriginal)
-                            returnMetrics.Add(m);
-                    }
-                    else
-                        returnMetrics.Add(m);                        
+                        for (int y = 0; y < serverManager.WorkerProcesses.Count; y++)
+                        {
+                            if (serverManager.WorkerProcesses[y].ProcessId == wpId)                            
+                            {
+                                m.instance = serverManager.WorkerProcesses[y].AppPoolName;
+                                switch(preserveOriginal)
+                                {
+                                    case true:
+                                        metrics.Add(m); break;
+                                    case false:
+                                        metrics[x] = m; break;
+                                }
+                            }
+                        }
+                    }                    
                 }
-                return returnMetrics;
+                return metrics;
             }
         }
 
@@ -118,12 +135,18 @@ namespace Metricus.Plugin
         }
 		
 		public void LoadSites() {
-			siteIDtoName.Clear ();
-			var mgr = new Microsoft.Web.Administration.ServerManager ();
-			foreach (var site in mgr.Sites) {
-				this.siteIDtoName.Add ((int)site.Id, site.Name);
-			}
-			this.siteIDtoName.PrintDump ();
+            lock (RefreshLock)
+            {
+                if(ServerManager != null)
+                    ServerManager.Dispose();
+                ServerManager = new Microsoft.Web.Administration.ServerManager();
+                siteIDtoName.Clear();
+                foreach (var site in ServerManager.Sites)
+                {
+                    this.siteIDtoName.Add((int)site.Id, site.Name);
+                }
+                this.siteIDtoName.PrintDump();
+            }
 		} 
 	}
 }

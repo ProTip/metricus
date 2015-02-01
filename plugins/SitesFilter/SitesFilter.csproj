@@ -27,7 +27,7 @@
     <Optimize>true</Optimize>
     <OutputPath>..\..\metricus\bin\Release\Plugins\SitesFilter</OutputPath>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>2</WarningLevel>
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>

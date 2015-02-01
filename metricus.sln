@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{74EC15EE-266B-41A2-B177-1F72F96F6417}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphiteOut", "Plugins\GraphiteOut\GraphiteOut.csproj", "{E815DB81-9308-4C72-8AEF-E11075B9B239}"
@@ -20,6 +22,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1E645C
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C42C17EB-B77A-4DFC-BC33-4C00E28ADE57}"
+	ProjectSection(SolutionItems) = preProject
+		Performance2.psess = Performance2.psess
 	EndProjectSection
 EndProject
 Global
@@ -61,9 +68,6 @@ Global
 		{2AAB72B7-A5D5-47CD-9A08-9D6AE4A79397} = {74EC15EE-266B-41A2-B177-1F72F96F6417}
 		{E4C09C8B-05AB-41B7-A243-AE6F049A5C37} = {74EC15EE-266B-41A2-B177-1F72F96F6417}
 		{184BE9B3-4150-4B1D-9B95-F198FB5C7064} = {74EC15EE-266B-41A2-B177-1F72F96F6417}
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = metricus\metricus.csproj
